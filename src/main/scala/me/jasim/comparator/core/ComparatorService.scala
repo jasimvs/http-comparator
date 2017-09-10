@@ -34,10 +34,33 @@ trait ComparatorServiceImpl extends ComparatorService {
     data
       .leftMap(msg => ComparatorError(msg, ResourceNotReady))
       .flatMap(data => data match {
-        case Data(Some(_), Some(_)) => calculateDiff(data)
+        case Data(Some(a), Some(b)) => EitherT.right(Future.successful(calculateDiff(a, b)))
         case _ => EitherT.left(Future.successful(ComparatorError("Resource not ready.", ResourceNotReady)))
       })
   }
 
-  def calculateDiff(data: Data): EitherT[Future, ComparatorError, DiffResponse] = ???
+  def calculateDiff(left: String, right: String): DiffResponse = {
+    if (left.length != right.length)
+      DifferentLength()
+    else {
+      val seq = left.zip(right)
+        .map(x => x._1.equals(x._2))
+        .zipWithIndex
+        .foldLeft(Seq.empty[Diff])((acc, x) =>
+          if (x._1)
+            acc
+          else {
+            acc.lastOption.map(last =>
+              if (last.offset + last.length == x._2)
+                acc.dropRight(1) :+ last.copy(length = last.length + 1)
+              else
+                acc :+ Diff(x._2, 1))
+              .getOrElse(Seq(Diff(x._2, 1)))
+          })
+      if (seq.isEmpty)
+        NoDifference()
+      else
+        ContentDoNotMatch(diffs = seq)
+    }
+  }
 }

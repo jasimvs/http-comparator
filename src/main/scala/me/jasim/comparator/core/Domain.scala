@@ -7,9 +7,9 @@ case class Diff(offset: Int, length: Int)
 sealed trait DiffResponse {
   val diffResultType: String
 }
-case class DifferentLength(diffResultType: String = "SizeDoNotMatch") extends DiffResponse
-case class NoDifference(diffResultType: String = "Equals") extends DiffResponse
-case class ContentDoNotMatch(diffResultType: String = "ContentDoNotMatch", diffs: Seq[Diff]) extends DiffResponse
+  case class DifferentLength(diffResultType: String = "SizeDoNotMatch") extends DiffResponse
+  case class NoDifference(diffResultType: String = "Equals") extends DiffResponse
+  case class ContentDoNotMatch(diffResultType: String = "ContentDoNotMatch", diffs: Seq[Diff]) extends DiffResponse
 
 sealed trait DataUploadStatus
 object DataUploadStatus {
