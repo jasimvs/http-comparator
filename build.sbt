@@ -13,8 +13,8 @@ val dependencies = Seq(
   "com.typesafe"   %  "config"              % "1.2.1",
   "ch.qos.logback" %  "logback-classic"     % "1.2.1",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.5.0",
-
-  "org.scalatest"  %% "scalatest"           % "3.0.3" % "test"
+  "org.mockito"    % "mockito-core"         % "1.8.5" % "test",
+  "org.scalatest"  %% "scalatest"           % "3.0.3" % "it,test"
 )
 
 lazy val commonSettings = Seq(
@@ -26,6 +26,11 @@ lazy val commonSettings = Seq(
   resolvers += "Typesafe Repository" at "http://repo.typesafe.com/typesafe/maven-releases/"
 )
 
+
 lazy val main =
   (project in file("."))
-    .settings(commonSettings: _*)
+    .configs(IntegrationTest)
+    .settings(Defaults.itSettings ++ commonSettings: _*)
+
+
+

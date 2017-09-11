@@ -16,9 +16,8 @@ object Config {
     val ip = cl.getString("ip")
     val port = cl.getInt("port")
 
-    MovieReservationConfig(ip, port)
+    HttpComparatorConfig(ip, port)
   }
 
 }
 
-case class MovieReservationConfig(ip: String, port: Int)

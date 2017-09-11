@@ -7,19 +7,9 @@ import me.jasim.comparator.core.ErrorType._
 import scala.concurrent._
 
 trait ComparatorService {
-
-  def register(resourceId: Int, compareData: String, leftOrRight: DataUploadType)
-              (implicit ec: ExecutionContext): EitherT[Future, String, DataUploadStatus]
-
-  def getDiff(resourceId: Int)
-             (implicit ec: ExecutionContext): EitherT[Future, ComparatorError, DiffResponse]
-}
-
-
-trait ComparatorServiceImpl extends ComparatorService {
   this: HttpComparatorRepository =>
 
-  override def register(resourceId: Int, compareData: String, leftOrRight: DataUploadType)
+  def register(resourceId: Int, compareData: String, leftOrRight: DataUploadType)
               (implicit ec: ExecutionContext): EitherT[Future, String, DataUploadStatus] = {
     val data = leftOrRight match {
       case _: DataUploadType.Left.type => Data(Option(compareData), None)
@@ -28,7 +18,7 @@ trait ComparatorServiceImpl extends ComparatorService {
     saveResource(resourceId, data)
   }
 
-  override def getDiff(resourceId: Int)
+  def getDiff(resourceId: Int)
              (implicit ec: ExecutionContext): EitherT[Future, ComparatorError, DiffResponse] = {
     val data = getResource(resourceId)
     data

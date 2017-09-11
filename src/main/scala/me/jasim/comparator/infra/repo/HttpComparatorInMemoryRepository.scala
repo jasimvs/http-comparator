@@ -21,7 +21,7 @@ trait HttpComparatorInMemoryRepository extends HttpComparatorRepository {
                            (implicit ec: ExecutionContext): EitherT[Future, String, DataUploadStatus] = {
     repo.get(resourceId)
       .map(currentData => data.copy(data.left.orElse(currentData.left), data.right.orElse(currentData.right)))
-      .map(x => repo.put(resourceId, x))
+      .map(updatedData => repo.put(resourceId, updatedData))
       .getOrElse(repo.put(resourceId, data))
 
     EitherT.right(Future.successful(DataUploadStatus.Success))
