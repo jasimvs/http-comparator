@@ -178,23 +178,22 @@ class IntegrationTestsSpec extends WordSpec with Matchers {
     }
   }
 
-//  TODO:
-//  "Upload left data" when {
-//    " the data json is not valid" should {
-//      " should return error 422." in {
-//
-//        val req = PUT(uri("http://127.0.0.1:8081/v1/diff/1/right"))
-//          .putHeaders(header)
-//          .withBody(putReq4)
-//
-//        val responseBody = client.status(req)
-//
-//        assert(responseBody.unsafeAttemptRun() match {
-//          case Left(er: UnexpectedStatus) => er.status == UnprocessableEntity
-//          case _ => false
-//        })
-//      }
-//    }
-//  }
+  "Upload left data" when {
+    " the data json is not valid" should {
+      " should return error 422." in {
+
+        val req = PUT(uri("http://127.0.0.1:8081/v1/diff/1/right"))
+          .putHeaders(header)
+          .withBody(putReq4)
+
+        val responseBody = client.status(req)
+
+        assert(responseBody.unsafeAttemptRun() match {
+          case Right(er) => er == UnprocessableEntity
+          case _ => false
+        })
+      }
+    }
+  }
 
 }
